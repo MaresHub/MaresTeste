@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Carta</title>
+    <link rel="icon" href="love.jpg" type="image/png" />
+    <style>
+      body {
+        background-color: #ffcccc;
+        text-align: center;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+        margin: 0;
+      }
+
+      .carta-container {
+        position: relative;
+        display: inline-block;
+        margin-top: 300px;
+        cursor: pointer;
+        transition: transform 1s ease-in-out;
+      }
+
+      .carta {
+        width: 200px;
+        height: 120px;
+        background: #ff6666;
+        border-radius: 5px;
+        position: relative;
+      }
+
+      .carta-tampa {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        border-left: 100px solid transparent;
+        border-right: 100px solid transparent;
+        border-top: 50px solid #ff4d4d;
+        transition: transform 0.5s ease-in-out;
+      }
+
+      .papel {
+        position: absolute;
+        top: 20px;
+        left: 10px;
+        width: 180px;
+        height: 100px;
+        background: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        transform: translateY(20px);
+        font-size: 18px;
+        color: red;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-weight: bold;
+        line-height: 1.2;
+        padding: 10px;
+      }
+
+      #conteudoPedido {
+        display: none;
+        opacity: 0;
+        transition: opacity 1.5s ease-in-out;
+      }
+
+      .heart {
+        font-size: 80px;
+        color: #ff3366;
+        cursor: pointer;
+        animation: vibrar 0.1s infinite alternate;
+      }
+
+      .heart:hover {
+        animation: vibrar 0.1s infinite alternate, brilho 1s infinite;
+      }
+
+      @keyframes vibrar {
+        0% {
+          transform: rotate(-2deg);
+        }
+        100% {
+          transform: rotate(2deg);
+        }
+      }
+
+      @keyframes brilho {
+        0% {
+          text-shadow: 0 0 5px #ff6699;
+        }
+        50% {
+          text-shadow: 0 0 15px #ff3366;
+        }
+        100% {
+          text-shadow: 0 0 5px #ff6699;
+        }
+      }
+
+      #nao {
+        font-size: 24px;
+        color: #333;
+        background-color: #ffcccc;
+        border: none;
+        cursor: pointer;
+        position: absolute;
+      }
+
+      .confetes {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 10;
+        display: none;
+      }
+
+      .confete {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: #ff3366;
+        border-radius: 50%;
+        animation: cairConfete 1.5s ease-in infinite;
+      }
+
+      @keyframes cairConfete {
+        0% {
+          transform: translateY(0) rotate(0deg);
+        }
+        100% {
+          transform: translateY(100vh) rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <audio
+      id="musica"
+      src="Ed Sheeran - Perfect (Official Music Video).mp3"
+      preload="auto"
+    ></audio>
+
+    <div class="carta-container" id="cartaContainer" onclick="abrirCarta()">
+      <div class="carta">
+        <div class="carta-tampa" id="tampa"></div>
+        <div class="papel" id="papel">Para: Nicolle<br /></div>
+      </div>
+    </div>
+
+    <div id="conteudoPedido">
+      <div class="container">
+        <h1>Última Pergunta</h1>
+        <p>Olá, Nicolle, já tem uns meses que queria te falar isso:</p>
+        <p>
+          Primeiramente que queria falar que to sem coragem de te mandar isso.
+        </p>
+        <p>Segunda, não consigo parar de pensar em você e já se fazem meses.</p>
+        <p>
+          Terceira, não consigo mais esconder isso e não sabia como te falar
+          isso pessoalmente, então decidi fazer do meu jeito... programando.
+        </p>
+        <p>Então, vamos lá para a última pergunta.</p>
+        <p>Nicolle, você aceita namorar comigo?</p>
+        <p
+          class="heart"
+          onclick="mostrarResposta(); soltarConfetes(); tocarMusica()"
+        >
+          ❤️
+        </p>
+        <button id="nao" onmouseover="mudarPosicao()">Não</button>
+        <p id="resposta" style="display: none"></p>
+      </div>
+    </div>
+
+    <div class="confetes" id="confetes"></div>
+
+    <script>
+      function abrirCarta() {
+        let confetesDiv = document.getElementById("confetes");
+        confetesDiv.style.display = "block";
+
+        for (let i = 0; i < 30; i++) {
+          let confete = document.createElement("div");
+          confete.classList.add("confete");
+          confete.style.left = `${Math.random() * 100}vw`;
+          confete.style.animationDuration = `${Math.random() * 1.5 + 1.5}s`;
+          confete.style.animationDelay = `${Math.random() * 1}s`;
+          confetesDiv.appendChild(confete);
+        }
+
+        document.getElementById("tampa").style.transform = "rotateX(180deg)";
+        document.getElementById("papel").style.opacity = "1";
+        document.getElementById("papel").style.transform = "translateY(-100px)";
+        setTimeout(() => {
+          document.querySelector(".carta-container").style.display = "none";
+          document.getElementById("conteudoPedido").style.display = "block";
+          setTimeout(() => {
+            document.getElementById("conteudoPedido").style.opacity = "1";
+          }, 100);
+          confetesDiv.style.display = "none";
+        }, 1500);
+      }
+
+      function mostrarResposta() {
+        document.getElementById("resposta").style.display = "block";
+        document.getElementById("resposta").innerHTML = "Sim! Eu aceito. ❤️";
+      }
+
+      function mudarPosicao() {
+        const buttonNao = document.getElementById("nao");
+        const randomX = Math.floor(Math.random() * (window.innerWidth - 100));
+        const randomY = Math.floor(Math.random() * (window.innerHeight - 50));
+        buttonNao.style.left = `${randomX}px`;
+        buttonNao.style.top = `${randomY}px`;
+      }
+
+      function soltarConfetes() {
+        let confetesDiv = document.getElementById("confetes");
+        confetesDiv.style.display = "block";
+
+        for (let i = 0; i < 10; i++) {
+          let confete = document.createElement("div");
+          confete.classList.add("confete");
+          confete.style.left = `${Math.random() * 100}vw`;
+          confete.style.animationDuration = `${Math.random() * 1.5 + 1.5}s`;
+          confete.style.animationDelay = `${Math.random() * 1}s`;
+          confetesDiv.appendChild(confete);
+        }
+      }
+
+      function tocarMusica() {
+        const musica = document.getElementById("musica");
+        musica.play();
+      }
+    </script>
+  </body>
+</html>
